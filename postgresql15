@@ -1,0 +1,26 @@
+name: Build PostgreSQL 15 Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-save:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Pull PostgreSQL 15 image
+      run: docker pull postgres:15
+
+    - name: Save image to a tar file
+      run: docker save -o postgres-15.tar postgres:15
+
+    - name: Upload tar file as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: postgres-15-image
+        path: postgres-15.tar
